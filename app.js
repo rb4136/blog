@@ -24,8 +24,6 @@ const dbSchema = {
 
 const Entry = mongoose.model("Entry", dbSchema);
 
-let posts = [];
-
 app.get("/", function(req, res) {
 
   Entry.find({}, function(err, foundEntries) {
@@ -63,9 +61,13 @@ app.post("/compose", function(req, res) {
     body: newBody
   });
 
-  entry.save();
+  entry.save(function(err) {
+    if (!err) {
+      res.redirect("/");
+    }
+  });
 
-  res.redirect("/");
+
 });
 
 app.get("/posts/:id", function(req, res) {
